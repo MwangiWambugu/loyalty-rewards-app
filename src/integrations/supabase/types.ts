@@ -9,13 +9,206 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      businesses: {
+        Row: {
+          business_type: string | null
+          created_at: string | null
+          id: string
+          name: string
+          owner_user_id: string
+        }
+        Insert: {
+          business_type?: string | null
+          created_at?: string | null
+          id?: string
+          name: string
+          owner_user_id: string
+        }
+        Update: {
+          business_type?: string | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          owner_user_id?: string
+        }
+        Relationships: []
+      }
+      customers: {
+        Row: {
+          business_id: string
+          created_at: string | null
+          full_name: string
+          id: string
+          phone: string
+          points: number
+        }
+        Insert: {
+          business_id: string
+          created_at?: string | null
+          full_name: string
+          id?: string
+          phone: string
+          points?: number
+        }
+        Update: {
+          business_id?: string
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          phone?: string
+          points?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rewards: {
+        Row: {
+          business_id: string
+          customer_id: string
+          id: string
+          is_redeemed: boolean
+          issued_at: string | null
+          points_at_issuance: number
+          redeemed_at: string | null
+          reward_type: string
+        }
+        Insert: {
+          business_id: string
+          customer_id: string
+          id?: string
+          is_redeemed?: boolean
+          issued_at?: string | null
+          points_at_issuance: number
+          redeemed_at?: string | null
+          reward_type?: string
+        }
+        Update: {
+          business_id?: string
+          customer_id?: string
+          id?: string
+          is_redeemed?: boolean
+          issued_at?: string | null
+          points_at_issuance?: number
+          redeemed_at?: string | null
+          reward_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rewards_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rewards_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          business_id: string
+          customer_id: string
+          id: string
+          metadata: Json | null
+          mpesa_receipt: string | null
+          payment_time: string | null
+          phone: string
+        }
+        Insert: {
+          amount: number
+          business_id: string
+          customer_id: string
+          id?: string
+          metadata?: Json | null
+          mpesa_receipt?: string | null
+          payment_time?: string | null
+          phone: string
+        }
+        Update: {
+          amount?: number
+          business_id?: string
+          customer_id?: string
+          id?: string
+          metadata?: Json | null
+          mpesa_receipt?: string | null
+          payment_time?: string | null
+          phone?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          business_id: string | null
+          customer_id: string | null
+          id: string
+          role: string
+        }
+        Insert: {
+          business_id?: string | null
+          customer_id?: string | null
+          id: string
+          role: string
+        }
+        Update: {
+          business_id?: string | null
+          customer_id?: string | null
+          id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_profiles_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_business_role: {
+        Args: { _role: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
